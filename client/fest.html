@@ -1,0 +1,29 @@
+<head>
+  <title>Fest</title>
+</head>
+
+<body>
+</body>
+
+<template name="layout">
+  <div>{{> yield}}</div>
+  <div>{{> loginButtons}}</div>
+</template>
+
+<template name="projects">
+  <h3>Available Projects:</h3>
+  <ul>
+  {{#each .}}
+    <li><h4><a href="{{pathFor 'project'}}">{{title}}</a></h4></li>
+  {{/each}}
+  </ul>
+  {{#if currentUser}}
+    <button class="btn btn-primary new-project">New Project</button>
+  {{else}}
+    {{> loginButtons}}
+  {{/if}}
+</template>
+
+<template name="project">
+  <h3>Poll: <span id="pollTitle">{{poll.title}}</span></h3>
+</template>
