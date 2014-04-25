@@ -6,6 +6,32 @@ Template.projects.events = {
   },
 };
 
+Template.project.rendered = function() {
+    if (Meteor.userId()) {
+      $('#projectTitle').attr("contenteditable", true);
+      this._editor = new Pen('#projectSummary');
+    }
+};
+
+Template.project.destroyed = function () {
+  this._editor.destroy();
+};
+
+Template.project.events = {
+    
+  'blur #projectTitle': function () {
+    var newTitle = $('#projectTitle').text();
+    Projects.update(this.project._id, { $set: {title: newTitle}});
+  },
+  
+  'blur #projectSummary': function () {
+    console.log($('#projectSummary'));
+    var newSummary = $('#projectSummary')[0].innerHTML;
+    Projects.update(this.project._id, { $set: {summary: newSummary}});
+  },
+    
+};
+
 Router.map(function() {
   this.route('projects', {
     path: '/',
@@ -26,7 +52,7 @@ Router.map(function() {
     data: function () {
       _id = this.params._id;
       var project = Projects.findOne({_id: this.params._id});
-      return {poll: project};
+      return {project: project};
     },
   });
 })
